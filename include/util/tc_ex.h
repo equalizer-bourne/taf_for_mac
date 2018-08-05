@@ -2,22 +2,29 @@
 #define __TC_EX_H
 
 #include <stdexcept>
+
+#if defined(__APPLE__)
+#include <string>
+#else
+
+#endif
+
 using namespace std;
 
 namespace taf
 {
 /////////////////////////////////////////////////
-// ËµÃ÷: Òì³£»ùÀà
+// è¯´æ˜: å¼‚å¸¸åŸºç±»
 // Author : j@syswin.com              
 /////////////////////////////////////////////////
 /**
-* Òì³£Àà
+* å¼‚å¸¸ç±»
 */
 class TC_Exception : public exception
 {
 public:
     /**
-     * ¹¹Ôì
+     * æ„é€ 
      * @param buffer
      *
      * @return explicit
@@ -25,19 +32,19 @@ public:
 	explicit TC_Exception(const string &buffer);
 
     /**
-     * ¹¹Ôì
+     * æ„é€ 
      * @param buffer
-     * @param err, ´íÎóÂë, ¿ÉÓÃstrerror»ñÈ¡´íÎóĞÅÏ¢
+     * @param err, é”™è¯¯ç , å¯ç”¨strerrorè·å–é”™è¯¯ä¿¡æ¯
      */
 	TC_Exception(const string &buffer, int err);
 
     /**
-     * Îö¹»
+     * æå¤Ÿ
      */
     virtual ~TC_Exception() throw();
 
     /**
-     * ´íÎóĞÅÏ¢
+     * é”™è¯¯ä¿¡æ¯
      *
      * @return const char*
      */

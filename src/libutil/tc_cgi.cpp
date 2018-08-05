@@ -3,6 +3,13 @@
 #include "util/tc_http.h"
 #include <string.h>
 
+
+#if __APPLE__
+#include <crt_externs.h>
+#define environ (*_NSGetEnviron())
+
+#endif
+
 namespace taf
 {
 

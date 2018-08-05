@@ -2,6 +2,11 @@
 #include <iostream>
 #include <string.h>
 
+#if __APPLE__
+#include <machine/endian.h>
+#define __bswap_64(t) htonll(t)
+#endif
+
 namespace taf
 {
 
