@@ -95,6 +95,8 @@
 		163F0B6D2116FB2E0013A2EA /* tc_hashmap_compact.h in Headers */ = {isa = PBXBuildFile; fileRef = 163F0B3A2116FB2D0013A2EA /* tc_hashmap_compact.h */; };
 		163F0B6E2116FB2E0013A2EA /* tc_mem_vector.h in Headers */ = {isa = PBXBuildFile; fileRef = 163F0B3B2116FB2D0013A2EA /* tc_mem_vector.h */; };
 		163F0B6F2116FB2E0013A2EA /* tc_http.h in Headers */ = {isa = PBXBuildFile; fileRef = 163F0B3C2116FB2D0013A2EA /* tc_http.h */; };
+		163F0B75211726550013A2EA /* tc_selecter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 163F0B74211726550013A2EA /* tc_selecter.cpp */; };
+		163F0B77211726740013A2EA /* tc_selecter.h in Headers */ = {isa = PBXBuildFile; fileRef = 163F0B76211726740013A2EA /* tc_selecter.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -201,6 +203,8 @@
 		163F0B3A2116FB2D0013A2EA /* tc_hashmap_compact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tc_hashmap_compact.h; sourceTree = "<group>"; };
 		163F0B3B2116FB2D0013A2EA /* tc_mem_vector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tc_mem_vector.h; sourceTree = "<group>"; };
 		163F0B3C2116FB2D0013A2EA /* tc_http.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tc_http.h; sourceTree = "<group>"; };
+		163F0B74211726550013A2EA /* tc_selecter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tc_selecter.cpp; sourceTree = "<group>"; };
+		163F0B76211726740013A2EA /* tc_selecter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tc_selecter.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -279,6 +283,7 @@
 				163F0A642116FA820013A2EA /* tc_mysql.cpp */,
 				163F0A652116FA820013A2EA /* tc_multi_hashmap.cpp */,
 				163F0A662116FA820013A2EA /* tc_thread_cond.cpp */,
+				163F0B74211726550013A2EA /* tc_selecter.cpp */,
 				163F0A672116FA820013A2EA /* tc_epoller.cpp */,
 				163F0A682116FA830013A2EA /* tc_option.cpp */,
 				163F0A692116FA830013A2EA /* tc_parsepara.cpp */,
@@ -305,6 +310,7 @@
 		163F0B092116FB2D0013A2EA /* util */ = {
 			isa = PBXGroup;
 			children = (
+				163F0B76211726740013A2EA /* tc_selecter.h */,
 				163F0B0A2116FB2D0013A2EA /* tc_mysql.h */,
 				163F0B0B2116FB2D0013A2EA /* tc_mem_chunk.h */,
 				163F0B0C2116FB2D0013A2EA /* tc_multi_hashmap.h */,
@@ -414,6 +420,7 @@
 				163F0B4E2116FB2E0013A2EA /* tc_hashmap.h in Headers */,
 				163F0B6C2116FB2E0013A2EA /* tc_thread_cond.h in Headers */,
 				163F0B682116FB2E0013A2EA /* tc_md5.h in Headers */,
+				163F0B77211726740013A2EA /* tc_selecter.h in Headers */,
 				163F0B692116FB2E0013A2EA /* tc_sem_mutex.h in Headers */,
 				163F0B522116FB2E0013A2EA /* tc_thread_queue.h in Headers */,
 				163F0B532116FB2E0013A2EA /* tc_cgi.h in Headers */,
@@ -536,6 +543,7 @@
 				163F0A9A2116FA830013A2EA /* tc_dyn_object.cpp in Sources */,
 				163F0A912116FA830013A2EA /* tc_timeprovider.cpp in Sources */,
 				163F0A9D2116FA830013A2EA /* tc_epoll_server.cpp in Sources */,
+				163F0B75211726550013A2EA /* tc_selecter.cpp in Sources */,
 				163F0A8B2116FA830013A2EA /* tc_mysql.cpp in Sources */,
 				163F0A8D2116FA830013A2EA /* tc_thread_cond.cpp in Sources */,
 				163F0A892116FA830013A2EA /* tc_socket.cpp in Sources */,

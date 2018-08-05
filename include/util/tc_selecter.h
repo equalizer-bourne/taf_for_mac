@@ -110,7 +110,12 @@ protected:
 	/**
      * 事件集
 	 */
-	struct epoll_event *_pevs;
+#if __APPLE__
+    int _max_fd;
+#else
+    struct epoll_event *_pevs;
+#endif
+	
 
     /**
      * 是否是ET模式
