@@ -15,70 +15,70 @@
 namespace taf
 {
 /////////////////////////////////////////////////
-// ËµÃ÷: epoll²Ù×÷·â×°Àà
+// è¯´æ˜: epollæ“ä½œå°è£…ç±»
 // Author : j@syswin.com              
 /////////////////////////////////////////////////
 // 
 /**
- * epoller²Ù×÷Àà
- * ÒÑ¾­Ä¬ÈÏ²ÉÓÃÁËEPOLLET·½Ê½×ö´¥·¢
+ * epolleræ“ä½œç±»
+ * å·²ç»é»˜è®¤é‡‡ç”¨äº†EPOLLETæ–¹å¼åšè§¦å‘
  */
 class TC_Epoller
 {
 public:
 
 	/**
-     * ¹¹Ôìº¯Êı
-     * @param bEt: Ä¬ÈÏÊÇETÄ£Ê½
+     * æ„é€ å‡½æ•°
+     * @param bEt: é»˜è®¤æ˜¯ETæ¨¡å¼
 	 */
 	TC_Epoller(bool bEt = true);
 
 	/**
-     * Îö¹»º¯Êı
+     * æå¤Ÿå‡½æ•°
 	 */
 	~TC_Epoller();
 
 	/**
-     * Éú³Éepoll¾ä±ú
-     * @param max_connections : epoll·şÎñĞèÒªÖ§³ÖµÄ×î´óÁ¬½ÓÊı
+     * ç”Ÿæˆepollå¥æŸ„
+     * @param max_connections : epollæœåŠ¡éœ€è¦æ”¯æŒçš„æœ€å¤§è¿æ¥æ•°
 	 */
 	void create(int max_connections);
 
 	/**
-     * Ìí¼Ó¼àÌı¾ä±ú
-     * @param fd, ¾ä±ú
-     * @param data, ¸¨ÖúµÄÊı¾İ, ¿ÉÒÔºóĞøÔÚepoll_eventÖĞ»ñÈ¡µ½
-     * @param event, ĞèÒª¼àÌıµÄÊÂ¼şEPOLLIN|EPOLLOUT
+     * æ·»åŠ ç›‘å¬å¥æŸ„
+     * @param fd, å¥æŸ„
+     * @param data, è¾…åŠ©çš„æ•°æ®, å¯ä»¥åç»­åœ¨epoll_eventä¸­è·å–åˆ°
+     * @param event, éœ€è¦ç›‘å¬çš„äº‹ä»¶EPOLLIN|EPOLLOUT
      *              
 	 */
 	void add(int fd, long long data, __uint32_t event);
 
 	/**
-     * ĞŞ¸Ä¾ä±úÊÂ¼ş
-     * @param fd, ¾ä±ú
-     * @param data, ¸¨ÖúµÄÊı¾İ, ¿ÉÒÔºóĞøÔÚepoll_eventÖĞ»ñÈ¡µ½
-     * @param event, ĞèÒª¼àÌıµÄÊÂ¼şEPOLLIN|EPOLLOUT
+     * ä¿®æ”¹å¥æŸ„äº‹ä»¶
+     * @param fd, å¥æŸ„
+     * @param data, è¾…åŠ©çš„æ•°æ®, å¯ä»¥åç»­åœ¨epoll_eventä¸­è·å–åˆ°
+     * @param event, éœ€è¦ç›‘å¬çš„äº‹ä»¶EPOLLIN|EPOLLOUT
 	 */
 	void mod(int fd, long long data, __uint32_t event);
 
 	/**
-     * É¾³ı¾ä±úÊÂ¼ş
-     * @param fd, ¾ä±ú
-     * @param data, ¸¨ÖúµÄÊı¾İ, ¿ÉÒÔºóĞøÔÚepoll_eventÖĞ»ñÈ¡µ½
-     * @param event, ĞèÒª¼àÌıµÄÊÂ¼şEPOLLIN|EPOLLOUT
+     * åˆ é™¤å¥æŸ„äº‹ä»¶
+     * @param fd, å¥æŸ„
+     * @param data, è¾…åŠ©çš„æ•°æ®, å¯ä»¥åç»­åœ¨epoll_eventä¸­è·å–åˆ°
+     * @param event, éœ€è¦ç›‘å¬çš„äº‹ä»¶EPOLLIN|EPOLLOUT
 	 */
 	void del(int fd, long long data, __uint32_t event);
 
 	/**
-     * µÈ´ıÊ±¼ä
-     * @param millsecond, ºÁÃë
+     * ç­‰å¾…æ—¶é—´
+     * @param millsecond, æ¯«ç§’
 	 *
-     * @return int, ·µ»Ø¶àÉÙ¸ö¾ä±úÓĞÊÂ¼ş´¥·¢
+     * @return int, è¿”å›å¤šå°‘ä¸ªå¥æŸ„æœ‰äº‹ä»¶è§¦å‘
 	 */
 	int wait(int millsecond);
 
 	/**
-     * »ñÈ¡±»´¥·¢µÄÊÂ¼ş
+     * è·å–è¢«è§¦å‘çš„äº‹ä»¶
 	 *
 	 * @return struct epoll_event&
 	 */
@@ -87,11 +87,11 @@ public:
 protected:
 
 	/**
-     * ¿ØÖÆepoll
-     * @param fd, ¾ä±ú
-     * @param data, ¸¨ÖúµÄÊı¾İ, ¿ÉÒÔºóĞøÔÚepoll_eventÖĞ»ñÈ¡µ½
-     * @param event, ĞèÒª¼àÌıµÄÊÂ¼ş
-     * @param op, ²Ù×÷
+     * æ§åˆ¶epoll
+     * @param fd, å¥æŸ„
+     * @param data, è¾…åŠ©çš„æ•°æ®, å¯ä»¥åç»­åœ¨epoll_eventä¸­è·å–åˆ°
+     * @param event, éœ€è¦ç›‘å¬çš„äº‹ä»¶
+     * @param op, æ“ä½œ
 	 */
 	void ctrl(int fd, long long data, __uint32_t events, int op);
 
@@ -103,17 +103,17 @@ protected:
     int _iEpollfd;
 
 	/**
-     * ×î´óÁ¬½ÓÊı
+     * æœ€å¤§è¿æ¥æ•°
 	 */
 	int	_max_connections;
 
 	/**
-     * ÊÂ¼ş¼¯
+     * äº‹ä»¶é›†
 	 */
 	struct epoll_event *_pevs;
 
     /**
-     * ÊÇ·ñÊÇETÄ£Ê½
+     * æ˜¯å¦æ˜¯ETæ¨¡å¼
      */
     bool _et;
 };
