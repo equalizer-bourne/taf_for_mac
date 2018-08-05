@@ -1,3 +1,4 @@
+#if __linux__
 #include "util/tc_epoller.h"
 #include <unistd.h>
 
@@ -77,3 +78,4 @@ int TC_Epoller::wait(int millsecond)
 
 }
 
+#endif

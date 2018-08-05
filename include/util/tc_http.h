@@ -6,7 +6,12 @@
 #include "util/tc_autoptr.h"
 #include "util/tc_thread.h"
 #include "util/tc_socket.h"
+
+#if __linux__
 #include "util/tc_epoller.h"
+#elif __APPLE__
+#include "util/tc_selecter.h"
+#endif
 #include "util/tc_timeout_queue.h"
 #include <map>
 #include <sstream>

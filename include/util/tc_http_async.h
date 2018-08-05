@@ -372,9 +372,11 @@ protected:
 //    vector<TC_ThreadPool*>      _npool;
 
     http_queue_type             *_data;
-    
+#if __linux__
     TC_Epoller                  _epoller;
-
+#elif __APPLE__
+    TC_Selecter                 _epoller;
+#endif
     bool                        _terminate;
 
     struct sockaddr             _proxyAddr;

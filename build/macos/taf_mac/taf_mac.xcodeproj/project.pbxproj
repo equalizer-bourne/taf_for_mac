@@ -284,6 +284,7 @@
 				163F0A652116FA820013A2EA /* tc_multi_hashmap.cpp */,
 				163F0A662116FA820013A2EA /* tc_thread_cond.cpp */,
 				163F0B74211726550013A2EA /* tc_selecter.cpp */,
+				163F0A762116FA830013A2EA /* tc_epoll_server.cpp */,
 				163F0A672116FA820013A2EA /* tc_epoller.cpp */,
 				163F0A682116FA830013A2EA /* tc_option.cpp */,
 				163F0A692116FA830013A2EA /* tc_parsepara.cpp */,
@@ -299,7 +300,6 @@
 				163F0A732116FA830013A2EA /* tc_dyn_object.cpp */,
 				163F0A742116FA830013A2EA /* tc_logger.cpp */,
 				163F0A752116FA830013A2EA /* tc_http_async.cpp */,
-				163F0A762116FA830013A2EA /* tc_epoll_server.cpp */,
 				163F0A772116FA830013A2EA /* .cvsignore */,
 				163F0A782116FA830013A2EA /* tc_mmap.cpp */,
 			);
@@ -311,12 +311,12 @@
 			isa = PBXGroup;
 			children = (
 				163F0B76211726740013A2EA /* tc_selecter.h */,
+				163F0B0F2116FB2D0013A2EA /* tc_epoller.h */,
 				163F0B0A2116FB2D0013A2EA /* tc_mysql.h */,
 				163F0B0B2116FB2D0013A2EA /* tc_mem_chunk.h */,
 				163F0B0C2116FB2D0013A2EA /* tc_multi_hashmap.h */,
 				163F0B0D2116FB2D0013A2EA /* tc_mmap.h */,
 				163F0B0E2116FB2D0013A2EA /* tc_thread_pool.h */,
-				163F0B0F2116FB2D0013A2EA /* tc_epoller.h */,
 				163F0B102116FB2D0013A2EA /* tc_dyn_object.h */,
 				163F0B112116FB2D0013A2EA /* tc_parsepara.h */,
 				163F0B122116FB2D0013A2EA /* tc_singleton.h */,
@@ -607,10 +607,19 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "/Volumes/mage/tool/mysqldata/mysql-5.7.22-macos10.13-x86_64/include";
+				LIBRARY_SEARCH_PATHS = "/Volumes/mage/tool/mysqldata/mysql-5.7.22-macos10.13-x86_64/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-lpthread",
+					"$(OTHER_CFLAGS)",
+					"-Wno-deprecated",
+					"-Wall",
+				);
 				SDKROOT = macosx;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 				USER_HEADER_SEARCH_PATHS = ../../include;
 			};
 			name = Debug;
@@ -660,9 +669,18 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "/Volumes/mage/tool/mysqldata/mysql-5.7.22-macos10.13-x86_64/include";
+				LIBRARY_SEARCH_PATHS = "/Volumes/mage/tool/mysqldata/mysql-5.7.22-macos10.13-x86_64/lib";
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-lpthread",
+					"$(OTHER_CFLAGS)",
+					"-Wno-deprecated",
+					"-Wall",
+				);
 				SDKROOT = macosx;
+				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
 				USER_HEADER_SEARCH_PATHS = ../../include;
 			};
 			name = Release;
@@ -688,6 +706,7 @@
 		163F0A002116F9F80013A2EA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VHWE67BKKW;
 				EXECUTABLE_PREFIX = lib;
@@ -702,6 +721,7 @@
 		163F0A012116F9F80013A2EA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_CXX_LIBRARY = "libstdc++";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = VHWE67BKKW;
 				EXECUTABLE_PREFIX = lib;

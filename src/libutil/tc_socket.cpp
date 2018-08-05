@@ -15,6 +15,7 @@
 #include "util/tc_socket.h"
 #include "util/tc_common.h"
 
+
 namespace taf
 {
 
@@ -158,16 +159,25 @@ void TC_Socket::parseAddr(const string &sAddr, struct in_addr &stSinAddr)
     }
     else if(iRet == 0)
     {
-        struct hostent stHostent;
+        
         struct hostent *pstHostent;
+#if __linux__
+        struct hostent stHostent;
         char buf[2048] = "\0";
         int iError;
 
         gethostbyname_r(sAddr.c_str(), &stHostent, buf, sizeof(buf), &pstHostent, &iError);
-
+#elif __APPLE__
+        pstHostent = gethostbyname(sAddr.c_str());
+#endif
         if (pstHostent == NULL)
         {
+            
+#if __linux__
             throw TC_Socket_Exception("[TC_Socket::parseAddr] gethostbyname_r error! :" + string(hstrerror(iError)));
+#elif __APPLE__
+            throw TC_Socket_Exception("[TC_Socket::parseAddr] gethostbyname_r error! :网络错误");
+#endif
         }
         else
         {

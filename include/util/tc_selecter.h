@@ -1,42 +1,61 @@
-#ifndef	__TC_EPOLLER_H_
-#define __TC_EPOLLER_H_
-
 #if __APPLE__
 
+#ifndef	__TC_SELECTER_H_
+#define __TC_SELECTER_H_
+
 #include<sys/select.h>
-
-#elif __linux__
-#include <sys/epoll.h>
-
-#endif
-
 #include <cassert>
+#include <map>
 
 namespace taf
 {
+    
 /////////////////////////////////////////////////
 // 说明: epoll操作封装类
 // Author : j@syswin.com              
 /////////////////////////////////////////////////
 // 
-/**
- * epoller操作类
- * 已经默认采用了EPOLLET方式做触发
- */
-class TC_Epoller
+
+    typedef union epoll_data{
+        void *ptr;
+        int fd;
+        __uint32_t u32;
+        __uint64_t u64;
+    }epoll_data_t;
+    
+    struct epoll_event {
+        __uint32_t events;
+        epoll_data_t data;
+    };
+    
+#define EPOLL_CTL_ADD 0x01  //select增加事件
+#define EPOLL_CTL_MOD 0x02  //修改select事件
+#define EPOLL_CTL_DEL 0x04  //删除事件
+    
+#define EPOLLERR 0x01       //fd出错
+#define EPOLLHUP (0x01<<1)  //fd挂起
+#define EPOLLET  (0x01<<2)  //epoll的边沿触发方式
+#define EPOLLIN  (0x01<<3)  //epoll的数据读取事件
+#define EPOLLOUT (0x01<<4)  //epoll的数据发送事件
+    
+    /**
+     * selecter操作类
+     */
+class TC_Selecter
 {
 public:
 
 	/**
      * 构造函数
-     * @param bEt: 默认是ET模式
+     * @param max_fd：使用最大的socket初始化selecter
 	 */
-	TC_Epoller(bool bEt = true);
+    TC_Selecter();
+	TC_Selecter(bool isET);
 
 	/**
      * 析够函数
 	 */
-	~TC_Epoller();
+	~TC_Selecter();
 
 	/**
      * 生成epoll句柄
@@ -82,8 +101,15 @@ public:
 	 *
 	 * @return struct epoll_event&
 	 */
-	struct epoll_event& get(int i) { assert(_pevs != 0); return _pevs[i]; }
-
+    struct epoll_event& get(int i);
+    //{ assert(_pevs != 0); return _pevs[i]; }
+    
+    bool isReadyRcve(int fd);
+    bool isReadySend(int fd);
+    bool isErro(int fd);
+    
+    int getiIEpollfd(){return _iEpollfd;}
+    
 protected:
 
 	/**
@@ -98,10 +124,12 @@ protected:
 protected:
 
     /**
-     * 	epoll
+     * 	select的最大fd值
      */
     int _iEpollfd;
 
+    
+    
 	/**
      * 最大连接数
 	 */
@@ -110,19 +138,24 @@ protected:
 	/**
      * 事件集
 	 */
-#if __APPLE__
-    int _max_fd;
-#else
-    struct epoll_event *_pevs;
-#endif
-	
-
+    std::map<int,struct epoll_event>  _pevs;
+    
+    fd_set _all_set;  //所有事件表
+    fd_set _rcve_set; //可读事件表
+    fd_set _send_set; //可写事件表
+    fd_set _erro_set; //错误或者挂起事件
+    
+    //空事件
+    struct epoll_event _emptyEvent;
     /**
      * 是否是ET模式
      */
     bool _et;
+    
+    int _nums;
 };
 
 }
+#endif
 #endif
 

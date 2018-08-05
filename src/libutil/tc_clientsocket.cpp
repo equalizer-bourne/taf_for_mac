@@ -1,7 +1,11 @@
 #include <cerrno>
 #include <iostream>
 #include "util/tc_clientsocket.h"
+#if __linux__
 #include "util/tc_epoller.h"
+#elif __APPLE__
+#include "util/tc_selecter.h"
+#endif
 #include "util/tc_common.h"
 
 namespace taf
@@ -188,8 +192,12 @@ int TC_TCPClient::checkSocket()
                 _socket.close();
                 return EM_CONNECT;
             }
-
+            
+#if __linux__
             TC_Epoller epoller(false);
+#elif __APPLE__
+            TC_Selecter epoller(false);
+#endif
             epoller.create(1);
             epoller.add(_socket.getfd(), 0, EPOLLOUT);
             int iRetCode = epoller.wait(_timeout);
@@ -242,7 +250,11 @@ int TC_TCPClient::recv(char *sRecvBuffer, size_t &iRecvLen)
         return iRet;
     }
 
+#if __linux__
     TC_Epoller epoller(false);
+#elif __APPLE__
+    TC_Selecter epoller(false);
+#endif
     epoller.create(1);
     epoller.add(_socket.getfd(), 0, EPOLLIN);
 
@@ -294,7 +306,11 @@ int TC_TCPClient::recvBySep(string &sRecvBuffer, const string &sSep)
         return iRet;
     }
 
+#if __linux__
     TC_Epoller epoller(false);
+#elif __APPLE__
+    TC_Selecter epoller(false);
+#endif
     epoller.create(1);
     epoller.add(_socket.getfd(), 0, EPOLLIN);
 
@@ -352,7 +368,11 @@ int TC_TCPClient::recvAll(string &sRecvBuffer)
         return iRet;
     }
 
+#if __linux__
     TC_Epoller epoller(false);
+#elif __APPLE__
+    TC_Selecter epoller(false);
+#endif
     epoller.create(1);
     epoller.add(_socket.getfd(), 0, EPOLLIN);
 
@@ -410,7 +430,11 @@ int TC_TCPClient::recvLength(char *sRecvBuffer, size_t iRecvLen)
     size_t iRecvLeft = iRecvLen;
     iRecvLen = 0;
 
+#if __linux__
     TC_Epoller epoller(false);
+#elif __APPLE__
+    TC_Selecter epoller(false);
+#endif
     epoller.create(1);
     epoller.add(_socket.getfd(), 0, EPOLLIN);
 
@@ -580,7 +604,11 @@ int TC_UDPClient::recv(char *sRecvBuffer, size_t &iRecvLen, string &sRemoteIp, u
         return iRet;
     }
 
+#if __linux__
     TC_Epoller epoller(false);
+#elif __APPLE__
+    TC_Selecter epoller(false);
+#endif
     epoller.create(1);
     epoller.add(_socket.getfd(), 0, EPOLLIN);
     int iRetCode = epoller.wait(_timeout);

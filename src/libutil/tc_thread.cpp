@@ -61,6 +61,7 @@ void TC_ThreadControl::yield()
 
 TC_Thread::TC_Thread() : _running(false)
 {
+    _tid = NULL;
 }
 
 void TC_Thread::threadEntry(TC_Thread *pThread)

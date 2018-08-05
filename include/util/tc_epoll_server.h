@@ -7,7 +7,11 @@
 #include <vector>
 #include <list>
 #include <algorithm>
+#if __linux__
 #include "util/tc_epoller.h"
+#elif __APPLE__
+#include "util/tc_selecter.h"
+#endif
 #include "util/tc_thread.h"
 #include "util/tc_clientsocket.h"
 #include "util/tc_logger.h"
@@ -1243,7 +1247,11 @@ public:
      * 获取Epoller对象
      * @return TC_Epoller*
      */
+#if __linux__
     TC_Epoller* getEpoller()    { return &_epoller; }
+#elif __APPLE__
+    TC_Selecter* getEpoller()    { return &_epoller; }
+#endif
 
     /**
      * 获取监听socket信息
@@ -1421,8 +1429,11 @@ protected:
     /**
      * epoll
      */
+#if __linux__
     TC_Epoller                  _epoller;
-
+#elif __APPLE__
+    TC_Selecter                 _epoller;
+#endif
     /**
      * 停止
      */

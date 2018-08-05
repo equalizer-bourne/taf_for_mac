@@ -1,14 +1,11 @@
+#if __linux__
+
 #ifndef	__TC_EPOLLER_H_
 #define __TC_EPOLLER_H_
 
-#if __APPLE__
 
-#include<sys/select.h>
-
-#elif __linux__
 #include <sys/epoll.h>
 
-#endif
 
 #include <cassert>
 
@@ -120,4 +117,7 @@ protected:
 
 }
 #endif
+
+#endif
+
 
