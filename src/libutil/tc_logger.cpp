@@ -8,8 +8,8 @@ namespace taf
 	bool TC_LoggerRoll::_bDyeingFlag = false;
 	TC_ThreadMutex  TC_LoggerRoll::_mutexDyeing;
 	set<pthread_t>  TC_LoggerRoll::_setThreadID;
-
-
+  
+    
 	void TC_LoggerRoll::setupThread(TC_LoggerThreadGroup *pThreadGroup)
 	{
 		assert(pThreadGroup != NULL);
@@ -45,29 +45,57 @@ namespace taf
 
 	void TC_LoggerRoll::write(const pair<int, string> &buffer)
 	{
-		pthread_t ThreadID = 0;
-		if (_bDyeingFlag)
-		{
-			TC_LockT<TC_ThreadMutex> lock(_mutexDyeing);
-
-			pthread_t tmp = pthread_self();
-			if (_setThreadID.count(tmp) == 1)
-			{
-				ThreadID = tmp;
-			}
-		}
-
-		if (_pThreadGroup)
-		{
-			_buffer.push_back(make_pair(ThreadID, buffer.second));
-		}
-		else
-		{
-			//同步记录日志
-			deque<pair<int, string> > ds;
-			ds.push_back(make_pair(ThreadID, buffer.second));
-			roll(ds);
-		}
+#if __APPLE__
+        int ThreadID = 0;
+        if (_bDyeingFlag)
+        {
+            TC_LockT<TC_ThreadMutex> lock(_mutexDyeing);
+            
+            pthread_t tmp = pthread_self();
+            if (_setThreadID.count(tmp) == 1)
+            {
+                ThreadID = __addPthreadForIntID(tmp);
+            }
+        }
+        
+        if (_pThreadGroup)
+        {
+            _buffer.push_back(make_pair(ThreadID, buffer.second));
+        }
+        else
+        {
+            //同步记录日志
+            deque<pair<int, string> > ds;
+            ds.push_back(make_pair(ThreadID, buffer.second));
+            roll(ds);
+        }
+#elif __linux__
+        
+        pthread_t ThreadID = 0;
+        if (_bDyeingFlag)
+        {
+            TC_LockT<TC_ThreadMutex> lock(_mutexDyeing);
+            
+            pthread_t tmp = pthread_self();
+            if (_setThreadID.count(tmp) == 1)
+            {
+                ThreadID = tmp;
+            }
+        }
+        
+        if (_pThreadGroup)
+        {
+            _buffer.push_back(make_pair(ThreadID, buffer.second));
+        }
+        else
+        {
+            //同步记录日志
+            deque<pair<int, string> > ds;
+            ds.push_back(make_pair(ThreadID, buffer.second));
+            roll(ds);
+        }
+#endif
+		
 	}
 
 	void TC_LoggerRoll::flush()

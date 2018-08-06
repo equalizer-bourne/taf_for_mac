@@ -723,6 +723,7 @@
 					"$(OTHER_CFLAGS)",
 					"-Wno-deprecated",
 					"-Wall",
+					"-D_REENTRANT",
 					"-pthread",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -751,6 +752,7 @@
 					"$(OTHER_CFLAGS)",
 					"-Wno-deprecated",
 					"-Wall",
+					"-D_REENTRANT",
 					"-pthread",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";

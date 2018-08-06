@@ -78,11 +78,59 @@ namespace taf
 			}
 			of.flush();
 		}
+        
 	};
 
 	class TC_LoggerThreadGroup;
 
 //////////////////////////////////////////////////////////////////////////////
+    
+#if __APPLE__
+    static map<pthread_t, int> __tmpThreadID;
+    static int __threadBase = 1;
+    static list<int> __delPtds;
+    int __getPthreadIntID(pthread_t ptd)
+    {
+        if (__tmpThreadID.find(ptd) != __tmpThreadID.end()) {
+            return __tmpThreadID[ptd];
+        }else{
+            return 0;
+        }
+    }
+    
+    int __addPthreadForIntID(pthread_t ptd)
+    {
+        if (__tmpThreadID.find(ptd) != __tmpThreadID.end()) {
+            return __tmpThreadID[ptd];
+        }else{
+            if (__delPtds.empty()) {
+                __threadBase++;
+                __tmpThreadID[ptd] = __threadBase;
+                return __threadBase;
+            }else{
+                int tid = __delPtds.front();
+                __delPtds.pop_front();
+                __tmpThreadID[ptd] = tid;
+                return tid;
+            }
+        }
+    }
+    
+    int __delPthreadIntID(pthread_t ptd)
+    {
+        map<pthread_t, int>::iterator it = __tmpThreadID.find(ptd);
+        if ( it != __tmpThreadID.end()) {
+            int tid = __tmpThreadID[ptd];
+            __tmpThreadID.erase(it);
+            __delPtds.push_back(tid);
+            return tid;
+        }else{
+            return 0;
+        }
+    }
+    
+#endif
+    
 /**
  * 具体写日志基类
  */
@@ -136,10 +184,16 @@ namespace taf
 			if (bEnable)
 			{
 				_setThreadID.insert(pthread_self());
+#if __APPLE__
+                __addPthreadForIntID(pthread_self());
+#endif
 			}
 			else
 			{
 				_setThreadID.erase(pthread_self());
+#if __APPLE__
+                __delPthreadIntID(pthread_self());
+#endif
 			}
 
 			_bDyeingFlag = (_setThreadID.size() > 0);
