@@ -105,6 +105,9 @@ namespace taf
         }else{
             if (__delPtds.empty()) {
                 __threadBase++;
+                if (__threadBase > 60000) {
+                    __threadBase = 100;
+                }
                 __tmpThreadID[ptd] = __threadBase;
                 return __threadBase;
             }else{
