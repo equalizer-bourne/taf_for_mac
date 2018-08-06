@@ -87,7 +87,7 @@ namespace taf
     
 #if __APPLE__
     static map<pthread_t, int> __tmpThreadID;
-    static int __threadBase = 1;
+    static int __threadBase = 100;
     static list<int> __delPtds;
     int __getPthreadIntID(pthread_t ptd)
     {
