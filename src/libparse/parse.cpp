@@ -415,7 +415,11 @@ void JceParse::checkConstValue(TypeIdPtr &tPtr, int c)
         }
     }
 }
+#if __APPLE__
 
+#define TAF_VERSION "4.6.0"
+
+#endif
 string JceParse::printHeaderRemark()
 {
     ostringstream s;

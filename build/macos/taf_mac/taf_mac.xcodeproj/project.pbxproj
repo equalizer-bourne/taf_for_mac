@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1615AACF211B096B0014040D /* jce.tab.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1615AAC8211B096A0014040D /* jce.tab.cpp */; };
+		1615AAD0211B096B0014040D /* lex.yy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1615AAC9211B096A0014040D /* lex.yy.cpp */; };
+		1615AAD2211B096B0014040D /* jce.tab.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 1615AACB211B096B0014040D /* jce.tab.hpp */; };
+		1615AAD3211B096B0014040D /* parse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1615AACC211B096B0014040D /* parse.cpp */; };
+		1615AAD5211B096B0014040D /* element.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1615AACE211B096B0014040D /* element.cpp */; };
+		1615AAD8211B098D0014040D /* element.h in Headers */ = {isa = PBXBuildFile; fileRef = 1615AAD6211B098D0014040D /* element.h */; };
+		1615AAD9211B098D0014040D /* parse.h in Headers */ = {isa = PBXBuildFile; fileRef = 1615AAD7211B098D0014040D /* parse.h */; };
+		1615AADB211B09E20014040D /* libutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 163F09F72116F9F80013A2EA /* libutil.a */; };
 		163F083E2116F3910013A2EA /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 163F083D2116F3910013A2EA /* main.cpp */; };
 		163F0A792116FA830013A2EA /* tc_common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 163F0A522116FA820013A2EA /* tc_common.cpp */; };
 		163F0A7A2116FA830013A2EA /* tc_thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 163F0A532116FA820013A2EA /* tc_thread.cpp */; };
@@ -112,6 +120,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1615AABB211B08FE0014040D /* libparse.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libparse.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1615AAC8211B096A0014040D /* jce.tab.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jce.tab.cpp; path = ../../../../../src/libparse/jce.tab.cpp; sourceTree = "<group>"; };
+		1615AAC9211B096A0014040D /* lex.yy.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = lex.yy.cpp; path = ../../../../../src/libparse/lex.yy.cpp; sourceTree = "<group>"; };
+		1615AACA211B096A0014040D /* jce.y */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.yacc; name = jce.y; path = ../../../../../src/libparse/jce.y; sourceTree = "<group>"; };
+		1615AACB211B096B0014040D /* jce.tab.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = jce.tab.hpp; path = ../../../../../src/libparse/jce.tab.hpp; sourceTree = "<group>"; };
+		1615AACC211B096B0014040D /* parse.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = parse.cpp; path = ../../../../../src/libparse/parse.cpp; sourceTree = "<group>"; };
+		1615AACE211B096B0014040D /* element.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = element.cpp; path = ../../../../../src/libparse/element.cpp; sourceTree = "<group>"; };
+		1615AAD6211B098D0014040D /* element.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = element.h; path = ../../../../../../include/parse/element.h; sourceTree = "<group>"; };
+		1615AAD7211B098D0014040D /* parse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parse.h; path = ../../../../../../include/parse/parse.h; sourceTree = "<group>"; };
 		163F083A2116F3910013A2EA /* taf_mac */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = taf_mac; sourceTree = BUILT_PRODUCTS_DIR; };
 		163F083D2116F3910013A2EA /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		163F09F72116F9F80013A2EA /* libutil.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libutil.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -208,6 +225,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1615AAB8211B08FE0014040D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1615AADB211B09E20014040D /* libutil.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		163F08372116F3910013A2EA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -225,12 +250,43 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1615AAC6211B090C0014040D /* libparse */ = {
+			isa = PBXGroup;
+			children = (
+				1615AAC7211B09460014040D /* parse */,
+				1615AACE211B096B0014040D /* element.cpp */,
+				1615AAC8211B096A0014040D /* jce.tab.cpp */,
+				1615AACB211B096B0014040D /* jce.tab.hpp */,
+				1615AACA211B096A0014040D /* jce.y */,
+				1615AAC9211B096A0014040D /* lex.yy.cpp */,
+				1615AACC211B096B0014040D /* parse.cpp */,
+			);
+			path = libparse;
+			sourceTree = "<group>";
+		};
+		1615AAC7211B09460014040D /* parse */ = {
+			isa = PBXGroup;
+			children = (
+				1615AAD6211B098D0014040D /* element.h */,
+				1615AAD7211B098D0014040D /* parse.h */,
+			);
+			path = parse;
+			sourceTree = "<group>";
+		};
+		1615AADA211B09E20014040D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		163F08312116F3910013A2EA = {
 			isa = PBXGroup;
 			children = (
 				163F0A502116FA640013A2EA /* lib */,
 				163F083C2116F3910013A2EA /* taf_mac */,
 				163F083B2116F3910013A2EA /* Products */,
+				1615AADA211B09E20014040D /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -239,6 +295,7 @@
 			children = (
 				163F083A2116F3910013A2EA /* taf_mac */,
 				163F09F72116F9F80013A2EA /* libutil.a */,
+				1615AABB211B08FE0014040D /* libparse.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -254,6 +311,7 @@
 		163F0A502116FA640013A2EA /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				1615AAC6211B090C0014040D /* libparse */,
 				163F0A512116FA820013A2EA /* libutil */,
 			);
 			path = lib;
@@ -369,6 +427,16 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		1615AAB9211B08FE0014040D /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1615AAD9211B098D0014040D /* parse.h in Headers */,
+				1615AAD2211B096B0014040D /* jce.tab.hpp in Headers */,
+				1615AAD8211B098D0014040D /* element.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		163F09F52116F9F80013A2EA /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -430,6 +498,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		1615AABA211B08FE0014040D /* parse */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1615AAC5211B08FE0014040D /* Build configuration list for PBXNativeTarget "parse" */;
+			buildPhases = (
+				1615AAB7211B08FE0014040D /* Sources */,
+				1615AAB8211B08FE0014040D /* Frameworks */,
+				1615AAB9211B08FE0014040D /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = parse;
+			productName = parse;
+			productReference = 1615AABB211B08FE0014040D /* libparse.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		163F08392116F3910013A2EA /* taf_mac */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 163F08412116F3910013A2EA /* Build configuration list for PBXNativeTarget "taf_mac" */;
@@ -473,6 +558,9 @@
 				LastUpgradeCheck = 0940;
 				ORGANIZATIONNAME = mage;
 				TargetAttributes = {
+					1615AABA211B08FE0014040D = {
+						CreatedOnToolsVersion = 9.4.1;
+					};
 					163F08392116F3910013A2EA = {
 						CreatedOnToolsVersion = 9.4.1;
 					};
@@ -495,11 +583,23 @@
 			targets = (
 				163F08392116F3910013A2EA /* taf_mac */,
 				163F09F62116F9F80013A2EA /* util */,
+				1615AABA211B08FE0014040D /* parse */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		1615AAB7211B08FE0014040D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1615AAD3211B096B0014040D /* parse.cpp in Sources */,
+				1615AAD0211B096B0014040D /* lex.yy.cpp in Sources */,
+				1615AAD5211B096B0014040D /* element.cpp in Sources */,
+				1615AACF211B096B0014040D /* jce.tab.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		163F08362116F3910013A2EA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -556,6 +656,34 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		1615AAC3211B08FE0014040D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = VHWE67BKKW;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = ../../../include;
+			};
+			name = Debug;
+		};
+		1615AAC4211B08FE0014040D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = VHWE67BKKW;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				USER_HEADER_SEARCH_PATHS = ../../../include;
+			};
+			name = Release;
+		};
 		163F083F2116F3910013A2EA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -764,6 +892,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		1615AAC5211B08FE0014040D /* Build configuration list for PBXNativeTarget "parse" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1615AAC3211B08FE0014040D /* Debug */,
+				1615AAC4211B08FE0014040D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		163F08352116F3910013A2EA /* Build configuration list for PBXProject "taf_mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
