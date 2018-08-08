@@ -103,7 +103,11 @@ void TC_Selecter::ctrl(int fd, long long data, __uint32_t events, int op)
 //        default:
 //            break;
     }
-
+    FD_SET(fd, &_all_set);  // 添加监听fd
+    if(fd > _iEpollfd)
+    {
+        _iEpollfd = fd;
+    }
 //    epoll_ctl(_iEpollfd, op, fd, &ev);
 }
 
@@ -136,12 +140,28 @@ void TC_Selecter::del(int fd, long long data, __uint32_t event)
 	ctrl(fd, data, event, EPOLL_CTL_DEL);
 }
 
+void TC_Selecter::selectPerRun()
+{
+    // _iEpollfd = -1;   // 初始化max_fd
+    FD_ZERO(&_all_set);
+    // FD_SET(listen_fd, &master_set);  // 添加监听fd
+}
+
 int TC_Selecter::wait(int millsecond)
 {
 //    return epoll_wait(_iEpollfd, _pevs, _max_connections + 1, millsecond);
     struct timeval dtime;
     dtime.tv_sec = int(millsecond/1000);
     dtime.tv_usec = int(millsecond%1000)*1000;
+
+
+    FD_ZERO(&_rcve_set);
+    memcpy(&_rcve_set, &_all_set, sizeof(_all_set));
+    FD_ZERO(&_send_set);
+    memcpy(&_send_set, &_all_set, sizeof(_all_set));
+    FD_ZERO(&_erro_set);
+    memcpy(&_erro_set, &_all_set, sizeof(_all_set));
+
     _nums = select(_iEpollfd+1, &_rcve_set, &_send_set, &_erro_set, &dtime);
     return _nums;
 }

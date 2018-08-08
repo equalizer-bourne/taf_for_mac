@@ -1397,25 +1397,27 @@ void TC_EpollServer::stopThread()
 
 void TC_EpollServer::createEpoll()
 {
+    
+#if __APPLE__
     //创建epoll
     _epoller.create(10240);
-
+//
     _epoller.add(_shutdown.getfd(), H64(ET_CLOSE), EPOLLIN);
     _epoller.add(_notify.getfd(), H64(ET_NOTIFY), EPOLLIN);
-
+    
     size_t maxAllConn   = 0;
     bool   hasUdp       = false;
-
+    
     //监听socket
     map<int, BindAdapterPtr>::iterator it = _listeners.begin();
-
+    
     while(it != _listeners.end())
     {
         if(it->second->getEndpoint().isTcp())
         {
             //获取最大连接数
             maxAllConn += it->second->getMaxConns();
-
+            
             _epoller.add(it->first, H64(ET_LISTEN) | it->first, EPOLLIN);
         }
         else
@@ -1423,30 +1425,83 @@ void TC_EpollServer::createEpoll()
             maxAllConn++;
             hasUdp = true;
         }
-
+        
         ++it;
     }
-
+    
     //初始化连接管理链表
     _list.init(maxAllConn);
-
+    
     if(hasUdp)
     {
         //监听socket
         map<int, BindAdapterPtr>::iterator it = _listeners.begin();
-
+        
         while(it != _listeners.end())
         {
             if(!it->second->getEndpoint().isTcp())
             {
                 Connection *cPtr = new Connection(it->second.get(), it->first);
-
+                
                 addUdpConnection(cPtr);
             }
-
+            
             ++it;
         }
     }
+#elif __linux__
+    //创建epoll
+    _epoller.create(10240);
+    
+    _epoller.add(_shutdown.getfd(), H64(ET_CLOSE), EPOLLIN);
+    _epoller.add(_notify.getfd(), H64(ET_NOTIFY), EPOLLIN);
+    
+    size_t maxAllConn   = 0;
+    bool   hasUdp       = false;
+    
+    //监听socket
+    map<int, BindAdapterPtr>::iterator it = _listeners.begin();
+    
+    while(it != _listeners.end())
+    {
+        if(it->second->getEndpoint().isTcp())
+        {
+            //获取最大连接数
+            maxAllConn += it->second->getMaxConns();
+            
+            _epoller.add(it->first, H64(ET_LISTEN) | it->first, EPOLLIN);
+        }
+        else
+        {
+            maxAllConn++;
+            hasUdp = true;
+        }
+        
+        ++it;
+    }
+    
+    //初始化连接管理链表
+    _list.init(maxAllConn);
+    
+    if(hasUdp)
+    {
+        //监听socket
+        map<int, BindAdapterPtr>::iterator it = _listeners.begin();
+        
+        while(it != _listeners.end())
+        {
+            if(!it->second->getEndpoint().isTcp())
+            {
+                Connection *cPtr = new Connection(it->second.get(), it->first);
+                
+                addUdpConnection(cPtr);
+            }
+            
+            ++it;
+        }
+    }
+#endif
+    
 }
 
 void TC_EpollServer::terminate()
@@ -1738,8 +1793,12 @@ void TC_EpollServer::processNet(const epoll_event &ev)
 
         return;
     }
-
-    if(ev.events & EPOLLIN)               //有数据需要读取
+#if __APPLE__
+    if(ev.events & EPOLLIN && _epoller.isReadyRcve(cPtr->getfd()))
+#elif __linux__
+    if(ev.events & EPOLLIN)
+#endif
+                 //有数据需要读取
     {
         recv_queue::queue_type vRecvData;
 
@@ -1757,8 +1816,11 @@ void TC_EpollServer::processNet(const epoll_event &ev)
             cPtr->insertRecvQueue(vRecvData);
         }
     }
-
-    if (ev.events & EPOLLOUT)              //有数据需要发送
+#if __APPLE__
+    if(ev.events & EPOLLOUT && _epoller.isReadySend(cPtr->getfd()))
+#elif __linux__
+    if(ev.events & EPOLLOUT)
+#endif
     {
         int ret = sendBuffer(cPtr);
 
@@ -1779,24 +1841,78 @@ void TC_EpollServer::waitForShutdown()
 
     createEpoll();
 
+#if __APPLE__
+    _epoller.selectPerRun();
+#endif
+    
     //循环监听网路连接请求
     while(!_bTerminate)
     {
         _list.checkTimeout(TC_TimeProvider::getInstance()->getNow());
 
         int iEvNum = _epoller.wait(2000);
-
+#if __APPLE__
+        int max_fd = _epoller.getiIEpollfd();
+        
+        for(int i = 0; i < max_fd; ++i)
+        {
+            try
+            {
+                const epoll_event &ev = _epoller.get(i);
+                
+                uint32_t h = ev.data.u64 >> 32;
+                
+                switch(h)
+                {
+                    case ET_LISTEN:
+                    {
+                        //监听端口有请求
+                        map<int, BindAdapterPtr>::const_iterator it = _listeners.find(ev.data.u32);
+                        if( it != _listeners.end())
+                        {
+                            if(ev.events & EPOLLIN && _epoller.isReadyRcve(i))
+                            {
+                                bool ret;
+                                do
+                                {
+                                    ret = accept(ev.data.u32);
+                                }while(ret);
+                            }
+                        }
+                    }
+                        break;
+                    case ET_CLOSE:
+                        //关闭请求
+                        break;
+                    case ET_NOTIFY:
+                        //发送通知
+                        processPipe();
+                        break;
+                    case ET_NET:
+                        //网络请求
+                        processNet(ev);
+                        break;
+                    default:
+                        assert(true);
+                }
+            }
+            catch(exception &ex)
+            {
+                error("waitForShutdown exception:" + string(ex.what()));
+            }
+        }
+#elif __linux__
         for(int i = 0; i < iEvNum; ++i)
         {
             try
             {
                 const epoll_event &ev = _epoller.get(i);
-
+                
                 uint32_t h = ev.data.u64 >> 32;
-
+                
                 switch(h)
                 {
-                case ET_LISTEN:
+                    case ET_LISTEN:
                     {
                         //监听端口有请求
                         map<int, BindAdapterPtr>::const_iterator it = _listeners.find(ev.data.u32);
@@ -1812,20 +1928,20 @@ void TC_EpollServer::waitForShutdown()
                             }
                         }
                     }
-                    break;
-                case ET_CLOSE:
-                    //关闭请求
-                    break;
-                case ET_NOTIFY:
-                    //发送通知
-                    processPipe();
-                    break;
-                case ET_NET:
-                    //网络请求
-                    processNet(ev);
-                    break;
-                default:
-                    assert(true);
+                        break;
+                    case ET_CLOSE:
+                        //关闭请求
+                        break;
+                    case ET_NOTIFY:
+                        //发送通知
+                        processPipe();
+                        break;
+                    case ET_NET:
+                        //网络请求
+                        processNet(ev);
+                        break;
+                    default:
+                        assert(true);
                 }
             }
             catch(exception &ex)
@@ -1833,6 +1949,8 @@ void TC_EpollServer::waitForShutdown()
                 error("waitForShutdown exception:" + string(ex.what()));
             }
         }
+#endif
+        
     }
     stopThread();
 }

@@ -269,9 +269,14 @@ int TC_TCPClient::recv(char *sRecvBuffer, size_t &iRecvLen)
         _socket.close();
         return EM_TIMEOUT;
     }
-
+#if __APPLE__
+    epoll_event ev  = epoller.get(_socket.getfd());
+    if(ev.events & EPOLLIN && epoller.isReadyRcve(_socket.getfd()))
+#elif __linux__
     epoll_event ev  = epoller.get(0);
     if(ev.events & EPOLLIN)
+#endif
+    
     {
         int iLen = _socket.recv((void*)sRecvBuffer, iRecvLen);
         if (iLen < 0)
@@ -328,8 +333,15 @@ int TC_TCPClient::recvBySep(string &sRecvBuffer, const string &sSep)
             return EM_TIMEOUT;
         }
 
+        
+#if __APPLE__
+        epoll_event ev  = epoller.get(_socket.getfd());
+        if(ev.events & EPOLLIN && epoller.isReadyRcve(_socket.getfd()))
+#elif __linux__
         epoll_event ev  = epoller.get(0);
         if(ev.events & EPOLLIN)
+#endif
+        
         {
             char buffer[LEN_MAXRECV] = "\0";
 
@@ -389,9 +401,15 @@ int TC_TCPClient::recvAll(string &sRecvBuffer)
             _socket.close();
             return EM_TIMEOUT;
         }
-
+#if __APPLE__
+        epoll_event ev  = epoller.get(_socket.getfd());
+        if(ev.events & EPOLLIN && epoller.isReadyRcve(_socket.getfd()))
+#elif __linux__
         epoll_event ev  = epoller.get(0);
         if(ev.events & EPOLLIN)
+#endif
+//        epoll_event ev  = epoller.get(0);
+//        if(ev.events & EPOLLIN)
         {
             char sTmpBuffer[LEN_MAXRECV] = "\0";
 
@@ -451,9 +469,15 @@ int TC_TCPClient::recvLength(char *sRecvBuffer, size_t iRecvLen)
             _socket.close();
             return EM_TIMEOUT;
         }
-
-        epoll_event ev  = epoller.get(0);
+#if __APPLE__
+        epoll_event ev  = epoller.get(_socket.getfd());
+        if(ev.events & EPOLLIN && epoller.isReadyRcve(_socket.getfd()))
+#elif __linux__
+            epoll_event ev  = epoller.get(0);
         if(ev.events & EPOLLIN)
+#endif
+//        epoll_event ev  = epoller.get(0);
+//        if(ev.events & EPOLLIN)
         {
             int len = _socket.recv((void*)(sRecvBuffer + iRecvLen), iRecvLeft);
             if (len < 0)
@@ -620,9 +644,15 @@ int TC_UDPClient::recv(char *sRecvBuffer, size_t &iRecvLen, string &sRemoteIp, u
     {
         return EM_TIMEOUT;
     }
-
-    epoll_event ev  = epoller.get(0);
+#if __APPLE__
+    epoll_event ev  = epoller.get(_socket.getfd());
+    if(ev.events & EPOLLIN && epoller.isReadyRcve(_socket.getfd()))
+#elif __linux__
+        epoll_event ev  = epoller.get(0);
     if(ev.events & EPOLLIN)
+#endif
+//    epoll_event ev  = epoller.get(0);
+//    if(ev.events & EPOLLIN)
     {
         iRet = _socket.recvfrom(sRecvBuffer, iRecvLen, sRemoteIp, iRemotePort);
         if(iRet <0 )

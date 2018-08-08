@@ -96,6 +96,9 @@ public:
 	 */
 	int wait(int millsecond);
 
+
+    void selectPerRun();
+
 	/**
      * 获取被触发的事件
 	 *

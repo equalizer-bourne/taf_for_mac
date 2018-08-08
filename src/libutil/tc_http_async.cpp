@@ -485,7 +485,11 @@ void TC_HttpAsync::run()
     async_process_type apt(&TC_HttpAsync::process);
 
     int64_t lastDealTimeout = 0;
-
+    
+#if __APPLE__
+    _epoller.selectPerRun();
+#endif
+    
     while(!_terminate)
     {
         try
@@ -501,22 +505,76 @@ void TC_HttpAsync::run()
             }
 
             int num = _epoller.wait(100);
-
+#if __APPLE__
+            int max_fd = _epoller.getiIEpollfd();
             for (int i = 0; i < num; ++i)
             {
                 epoll_event ev = _epoller.get(i);
-
+                
                 uint32_t uniqId = (uint32_t)ev.data.u64;
-
+                
                 AsyncRequestPtr p = _data->get(uniqId, false);
                 
                 if(!p) continue;
-
-//                async_process_type::wrapper_type w(apt, p, ev.events);
-
-//                _npool[uniqId%_npool.size()]->exec(w);
+                
+                //                async_process_type::wrapper_type w(apt, p, ev.events);
+                
+                //                _npool[uniqId%_npool.size()]->exec(w);
+                
+                epoll_event evtmp;
+//                evtmp.data = ev.data;
+                evtmp.events = 0;
+                if (_epoller.isReadySend(i) && ev.events & EPOLLOUT) {
+                    evtmp.events  = evtmp.events | EPOLLOUT;
+                }
+                
+                if (_epoller.isReadyRcve(i) && ev.events & EPOLLIN) {
+                    evtmp.events  = evtmp.events | EPOLLIN;
+                }
+                
+                if (_epoller.isErro(i)){
+                    if(ev.events & EPOLLHUP) {
+                    evtmp.events  = evtmp.events | EPOLLHUP;
+                    }
+                    if(ev.events & EPOLLERR){
+                        evtmp.events  = evtmp.events | EPOLLERR;
+                    }
+                }
+                
+                process(p, evtmp.events);
+            }
+#elif __linux__
+            for (int i = 0; i < num; ++i)
+            {
+                epoll_event ev = _epoller.get(i);
+                
+                uint32_t uniqId = (uint32_t)ev.data.u64;
+                
+                AsyncRequestPtr p = _data->get(uniqId, false);
+                
+                if(!p) continue;
+                
+                //                async_process_type::wrapper_type w(apt, p, ev.events);
+                
+                //                _npool[uniqId%_npool.size()]->exec(w);
                 process(p, ev.events);
             }
+#endif
+//            for (int i = 0; i < num; ++i)
+//            {
+//                epoll_event ev = _epoller.get(i);
+//
+//                uint32_t uniqId = (uint32_t)ev.data.u64;
+//
+//                AsyncRequestPtr p = _data->get(uniqId, false);
+//
+//                if(!p) continue;
+//
+////                async_process_type::wrapper_type w(apt, p, ev.events);
+//
+////                _npool[uniqId%_npool.size()]->exec(w);
+//                process(p, ev.events);
+//            }
         }
         catch(exception &ex)
         {
